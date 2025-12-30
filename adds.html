@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    
+    <!-- Unity Ads Script -->
+    <script src="https://web-sdk.unityads.unity3d.com/webbanner.js"></script>
+    
+    <!-- Unity Ads Simulation for HTTP Testing -->
+    <script>
+    // Unity Ads Simulator - Works on HTTP/localhost
+    (function() {
+        console.log('🔧 Unity Ads Simulator loading...');
+        
+        // Check if we're on HTTP or localhost
+        const isHttp = window.location.protocol === 'http:';
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+        
+        // Only activate simulator on HTTP/localhost
+        if (isHttp || isLocalhost) {
+            console.log('🌐 HTTP/localhost detected - activating Unity Ads Simulator');
+            
+            // Show test mode notification
+            setTimeout(() => {
+                const notification = document.getElementById('testModeNotification');
+                if (notification) {
+                    notification.style.display = 'block';
+                    notification.textContent = 'UNITY ADS SIMULATION MODE (HTTP)';
+                    notification.style.background = '#FF9800';
+                }
+            }, 1000);
+            
+            // Create simulated Unity Ads object
+            const unityAdsSimulator = {
+                isSimulator: true,
+                version: '3.7.8',
+                
+                init: function(config) {
+                    console.log('🎮 Unity Ads Simulator: Initializing...');
+                    console.log('Game ID:', config.gameId);
+                    console.log('Test Mode:', config.testMode);
+                    
+                    // Simulate initialization delay
+                    setTimeout(() => {
+                        if (config.onInitComplete) {
+                            config.onInitComplete();
+                            console.log('✅ Unity Ads Simulator: Initialized successfully');
+                        }
+                        
+                        if (config.onInitFailed) {
+                            // Don't call onInitFailed since we're simulating success
+                        }
+                    }, 800);
+                    
+                    return this;
+                },
+                
+                createBanner: function(options) {
+                    console.log('🖼️ Unity Ads Simulator: Creating banner');
+                    
+                    // Create simulated banner HTML
+                    const bannerId = Math.random().toString(36).substring(7);
+                    const bannerHTML = `
+                        <div id="simBanner_${bannerId}" style="
+                            width: 320px;
+                            height: 50px;
+                            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 4px;
+                            font-family: Arial, sans-serif;
+                            text-align: center;
+                            border: 2px solid #fff;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div style="font-weight: bold; font-size: 14px;">🎮 UNITY ADS SIMULATION</div>
+                            <div style="font-size: 10px; opacity: 0.8;">Test Mode • Click to Refresh</div>
+                        </div>
+                    `;
+                    
+                    // Insert into container
+                    if (options.container) {
+                        options.container.innerHTML = bannerHTML;
+                        options.container.style.display = 'block';
+                        
+                        // Remove loading text
+                        const loadingEl = options.container.parentElement.querySelector('.ad-loading');
+                        if (loadingEl) {
+                            loadingEl.style.display = 'none';
+                        }
+                        
+                        // Add click to refresh
+                        const bannerEl = document.getElementById(`simBanner_${bannerId}`);
+                        if (bannerEl) {
+                            bannerEl.onclick = function() {
+                                console.log('🔄 Banner clicked - simulating refresh');
+                                const colors = [
+                                    'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+                                    'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)',
+                                    'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)',
+                                    'linear-gradient(45deg, #43e97b 0%, #38f9d7 100%)',
+                                    'linear-gradient(45deg, #fa709a 0%, #fee140 100%)'
+                                ];
+                                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                                bannerEl.style.background = randomColor;
+                            };
+                        }
+                    }
+                    
+                    // Return banner controller
+                    return {
+                        refresh: function() {
+                            console.log('🔄 Unity Ads Simulator: Banner refreshed');
+                            const bannerEl = document.getElementById(`simBanner_${bannerId}`);
+                            if (bannerEl) {
+                                const colors = [
+                                    'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+                                    'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)'
+                                ];
+                                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                                bannerEl.style.background = randomColor;
+                                bannerEl.style.transform = 'scale(0.98)';
+                                setTimeout(() => {
+                                    bannerEl.style.transform = 'scale(1)';
+                                }, 150);
+                            }
+                        },
+                        destroy: function() {
+                            console.log('🗑️ Unity Ads Simulator: Banner destroyed');
+                            const bannerEl = document.getElementById(`simBanner_${bannerId}`);
+                            if (bannerEl) {
+                                bannerEl.style.opacity = '0';
+                                bannerEl.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    if (bannerEl.parentElement) {
+                                        bannerEl.parentElement.innerHTML = '<div class="ad-loading">Ad Space (Simulation)</div>';
+                                    }
+                                }, 300);
+                            }
+                        },
+                        show: function() {
+                            console.log('👁️ Unity Ads Simulator: Banner shown');
+                            const bannerEl = document.getElementById(`simBanner_${bannerId}`);
+                            if (bannerEl) {
+                                bannerEl.style.display = 'flex';
+                            }
+                        },
+                        hide: function() {
+                            console.log('👁️‍🗨️ Unity Ads Simulator: Banner hidden');
+                            const bannerEl = document.getElementById(`simBanner_${bannerId}`);
+                            if (bannerEl) {
+                                bannerEl.style.display = 'none';
+                            }
+                        }
+                    };
+                },
+                
+                createInterstitial: function(options) {
+                    console.log('📱 Unity Ads Simulator: Interstitial loaded');
+                    
+                    let isLoaded = true;
+                    
+                    return {
+                        show: function(showOptions) {
+                            if (!isLoaded) {
+                                console.log('❌ Interstitial not loaded');
+                                return;
+                            }
+                            
+                            console.log('📱 Unity Ads Simulator: Showing interstitial');
+                            
+                            // Create interstitial overlay
+                            const overlay = document.createElement('div');
+                            overlay.style.cssText = `
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0,0,0,0.95);
+                                z-index: 999999;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                color: white;
+                                font-family: Arial, sans-serif;
+                                animation: fadeIn 0.3s ease-out;
+                            `;
+                            
+                            overlay.innerHTML = `
+                                <div style="
+                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                    padding: 30px;
+                                    border-radius: 20px;
+                                    max-width: 400px;
+                                    text-align: center;
+                                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                                    border: 3px solid white;
+                                ">
+                                    <div style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">
+                                        🎮 UNITY ADS SIMULATION
+                                    </div>
+                                    <div style="font-size: 16px; margin-bottom: 30px; opacity: 0.9;">
+                                        Test Interstitial Ad
+                                    </div>
+                                    <div style="
+                                        background: white;
+                                        color: #333;
+                                        padding: 15px 30px;
+                                        border-radius: 50px;
+                                        font-weight: bold;
+                                        cursor: pointer;
+                                        margin-top: 20px;
+                                        border: none;
+                                        font-size: 18px;
+                                        transition: all 0.3s;
+                                    " id="closeInterstitial">
+                                        CLOSE AD (2s)
+                                    </div>
+                                    <div style="font-size: 12px; margin-top: 30px; opacity: 0.7;">
+                                        This is a simulation. Real Unity Ads require HTTPS.
+                                    </div>
+                                </div>
+                            `;
+                            
+                            document.body.appendChild(overlay);
+                            
+                            // Close button functionality
+                            const closeBtn = document.getElementById('closeInterstitial');
+                            let countdown = 2;
+                            closeBtn.textContent = `CLOSE AD (${countdown}s)`;
+                            
+                            const countdownInterval = setInterval(() => {
+                                countdown--;
+                                if (countdown > 0) {
+                                    closeBtn.textContent = `CLOSE AD (${countdown}s)`;
+                                } else {
+                                    clearInterval(countdownInterval);
+                                    closeBtn.textContent = '✓ CLOSE NOW';
+                                    closeBtn.style.background = '#4CAF50';
+                                    closeBtn.style.color = 'white';
+                                    closeBtn.onclick = closeAd;
+                                }
+                            }, 1000);
+                            
+                            function closeAd() {
+                                console.log('📱 Unity Ads Simulator: Interstitial closed');
+                                overlay.style.animation = 'fadeOut 0.3s ease-out';
+                                setTimeout(() => {
+                                    if (overlay.parentElement) {
+                                        overlay.parentElement.removeChild(overlay);
+                                    }
+                                    if (showOptions && showOptions.onClose) {
+                                        showOptions.onClose();
+                                    }
+                                    // Reload interstitial
+                                    isLoaded = true;
+                                }, 300);
+                            }
+                            
+                            // Auto-close after 5 seconds
+                            setTimeout(() => {
+                                if (document.body.contains(overlay)) {
+                                    closeAd();
+                                }
+                            }, 5000);
+                        },
+                        
+                        load: function() {
+                            console.log('📱 Unity Ads Simulator: Interstitial loading');
+                            isLoaded = true;
+                            if (options.onLoad) {
+                                setTimeout(() => options.onLoad(), 500);
+                            }
+                        }
+                    };
+                },
+                
+                createRewarded: function(options) {
+                    console.log('🏆 Unity Ads Simulator: Rewarded ad loaded');
+                    
+                    let isLoaded = true;
+                    
+                    return {
+                        show: function(showOptions) {
+                            if (!isLoaded) {
+                                console.log('❌ Rewarded ad not loaded');
+                                return;
+                            }
+                            
+                            console.log('🏆 Unity Ads Simulator: Showing rewarded ad');
+                            
+                            // Create rewarded overlay
+                            const overlay = document.createElement('div');
+                            overlay.style.cssText = `
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0,0,0,0.97);
+                                z-index: 999999;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                color: white;
+                                font-family: Arial, sans-serif;
+                                animation: fadeIn 0.3s ease-out;
+                            `;
+                            
+                            overlay.innerHTML = `
+                                <div style="
+                                    background: linear-gradient(135deg, #FFD700 0%, #FF9800 100%);
+                                    padding: 30px;
+                                    border-radius: 20px;
+                                    max-width: 400px;
+                                    text-align: center;
+                                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                                    border: 3px solid white;
+                                    color: #333;
+                                ">
+                                    <div style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">
+                                        🏆 REWARDED AD SIMULATION
+                                    </div>
+                                    <div style="font-size: 18px; margin-bottom: 20px; font-weight: bold;">
+                                        Watch complete video to earn reward!
+                                    </div>
+                                    <div style="
+                                        background: #333;
+                                        color: white;
+                                        padding: 20px;
+                                        border-radius: 10px;
+                                        margin: 20px 0;
+                                        font-size: 14px;
+                                    ">
+                                        <div style="margin-bottom: 10px;">🎮 <strong>FREE CONTINUE</strong></div>
+                                        <div>Continue playing from where you left off!</div>
+                                    </div>
+                                    <div style="
+                                        display: flex;
+                                        gap: 15px;
+                                        margin-top: 30px;
+                                    ">
+                                        <div style="
+                                            background: #4CAF50;
+                                            color: white;
+                                            padding: 15px 30px;
+                                            border-radius: 50px;
+                                            font-weight: bold;
+                                            cursor: pointer;
+                                            flex: 1;
+                                            border: none;
+                                            font-size: 16px;
+                                            transition: all 0.3s;
+                                        " id="completeRewarded">
+                                            WATCH (5s)
+                                        </div>
+                                        <div style="
+                                            background: #f44336;
+                                            color: white;
+                                            padding: 15px 30px;
+                                            border-radius: 50px;
+                                            font-weight: bold;
+                                            cursor: pointer;
+                                            flex: 1;
+                                            border: none;
+                                            font-size: 16px;
+                                            transition: all 0.3s;
+                                        " id="skipRewarded">
+                                            SKIP
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 12px; margin-top: 30px; opacity: 0.7;">
+                                        Simulation: Complete for reward, Skip for no reward
+                                    </div>
+                                </div>
+                            `;
+                            
+                            document.body.appendChild(overlay);
+                            
+                            // Progress bar
+                            const progressBar = document.createElement('div');
+                            progressBar.style.cssText = `
+                                width: 100%;
+                                height: 5px;
+                                background: rgba(255,255,255,0.2);
+                                margin-top: 20px;
+                                border-radius: 3px;
+                                overflow: hidden;
+                            `;
+                            
+                            const progressFill = document.createElement('div');
+                            progressFill.style.cssText = `
+                                width: 0%;
+                                height: 100%;
+                                background: #4CAF50;
+                                transition: width 0.1s linear;
+                            `;
+                            
+                            progressBar.appendChild(progressFill);
+                            overlay.querySelector('div > div').appendChild(progressBar);
+                            
+                            // Button functionality
+                            const completeBtn = document.getElementById('completeRewarded');
+                            const skipBtn = document.getElementById('skipRewarded');
+                            
+                            let countdown = 5;
+                            let completed = false;
+                            let countdownInterval;
+                            
+                            function updateButton() {
+                                if (countdown > 0) {
+                                    completeBtn.textContent = `WATCH (${countdown}s)`;
+                                    progressFill.style.width = `${(5 - countdown) * 20}%`;
+                                } else {
+                                    completeBtn.textContent = '✓ REWARD READY';
+                                    completeBtn.style.background = '#2E7D32';
+                                    completed = true;
+                                }
+                            }
+                            
+                            updateButton();
+                            countdownInterval = setInterval(() => {
+                                countdown--;
+                                updateButton();
+                                if (countdown <= 0) {
+                                    clearInterval(countdownInterval);
+                                }
+                            }, 1000);
+                            
+                            completeBtn.onclick = function() {
+                                if (!completed) {
+                                    alert('Please wait for the countdown to finish!');
+                                    return;
+                                }
+                                console.log('🏆 Unity Ads Simulator: Rewarded ad completed');
+                                closeRewarded(true);
+                            };
+                            
+                            skipBtn.onclick = function() {
+                                console.log('🏆 Unity Ads Simulator: Rewarded ad skipped');
+                                closeRewarded(false);
+                            };
+                            
+                            function closeRewarded(rewardEarned) {
+                                clearInterval(countdownInterval);
+                                overlay.style.animation = 'fadeOut 0.3s ease-out';
+                                setTimeout(() => {
+                                    if (overlay.parentElement) {
+                                        overlay.parentElement.removeChild(overlay);
+                                    }
+                                    if (showOptions && showOptions.onClose) {
+                                        showOptions.onClose(rewardEarned);
+                                    }
+                                    // Reload rewarded ad
+                                    isLoaded = true;
+                                }, 300);
+                            }
+                        },
+                        
+                        load: function() {
+                            console.log('🏆 Unity Ads Simulator: Rewarded ad loading');
+                            isLoaded = true;
+                            if (options.onLoad) {
+                                setTimeout(() => options.onLoad(), 500);
+                            }
+                        }
+                    };
+                }
+            };
+            
+            // Override the real unityAds if it doesn't exist or we're on HTTP
+            setTimeout(() => {
+                if (typeof unityAds === 'undefined' || isHttp) {
+                    window.unityAds = unityAdsSimulator;
+                    console.log('✅ Unity Ads Simulator activated');
+                    
+                    // Add CSS animations
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes fadeIn {
+                            from { opacity: 0; transform: scale(0.9); }
+                            to { opacity: 1; transform: scale(1); }
+                        }
+                        @keyframes fadeOut {
+                            from { opacity: 1; transform: scale(1); }
+                            to { opacity: 0; transform: scale(0.9); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }, 100);
+        }
+    })();
+    </script>
+    
+    <style>
+        /* [KEEP ALL YOUR EXISTING CSS STYLES HERE - THEY ARE FINE] */
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 50%, #654321 50%, #654321 100%);
+            padding: 0;
+            position: relative;
+        }
+
+        /* AD CONTAINERS - Optimized for Unity Ads */
+        #adTopContainer, #adBottomContainer {
+            width: 100%;
+            max-width: 400px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            z-index: 1000;
+            position: relative;
+        }
+
+        #adTopContainer {
+            border-bottom: 1px solid #333;
+        }
+
+        #adBottomContainer {
+            border-top: 1px solid #333;
+        }
+
+        .unity-ad-container {
+            width: 320px;
+            height: 50px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Unity Ads specific styling */
+        #unityTopBanner, #unityBottomBanner {
+            width: 320px;
+            height: 50px;
+            display: none; /* Hidden until ad loads */
+        }
+
+        .ad-loading {
+            color: #888;
+            font-size: 12px;
+            text-align: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+        /* Unity Ads brand styling */
+        .unity-brand {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            color: #00ccff;
+            font-size: 9px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* GAME WRAPPER */
+        #gameWrapper {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            touch-action: none;
+        }
+
+        /* GAME UI */
+        #startScreen, #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.92);
+            color: white;
+            z-index: 50;
+            padding: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
+
+        #gameOverScreen {
+            display: none;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            color: #FFD700;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1em;
+            margin: 6px 0;
+            text-align: center;
+            max-width: 100%;
+            line-height: 1.3;
+        }
+
+        button {
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            min-width: 140px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: linear-gradient(to bottom, #45a049, #1B5E20);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .score {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            z-index: 20;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .instructions {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-size: 0.85em;
+            max-width: 100%;
+            line-height: 1.4;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .difficulty {
+            position: absolute;
+            top: 60px;
+            left: 15px;
+            color: white;
+            font-size: 0.8em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 8px;
+            border-radius: 10px;
+        }
+        
+        .game-over-content {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            max-width: 90%;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .score-display {
+            font-size: 1.2em;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .high-score-display {
+            font-size: 1.2em;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+        }
+        
+        .fps-counter {
+            position: absolute;
+            top: 60px;
+            right: 15px;
+            color: white;
+            font-size: 0.8em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 8px;
+            border-radius: 10px;
+            opacity: 0.7;
+        }
+        
+        .speed-indicator {
+            position: absolute;
+            top: 90px;
+            left: 15px;
+            color: #FFD700;
+            font-size: 0.75em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 8px;
+            border-radius: 10px;
+        }
+
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-height: 700px) {
+            #gameWrapper {
+                height: 500px;
+            }
+            
+            #adTopContainer, #adBottomContainer {
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #gameWrapper {
+                max-width: 100%;
+            }
+            
+            .unity-ad-container {
+                width: 100%;
+                max-width: 320px;
+            }
+            
+            #unityTopBanner, #unityBottomBanner {
+                width: 100% !important;
+                max-width: 320px !important;
+            }
+        }
+
+        /* TEST MODE NOTIFICATION */
+        #testModeNotification {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: #00ccff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 10px;
+            z-index: 10000;
+            display: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* REWARD BUTTON */
+        .reward-button {
+            background: linear-gradient(to bottom, #FF9800, #F57C00) !important;
+            margin-top: 10px;
+        }
+
+        .reward-button:hover {
+            background: linear-gradient(to bottom, #FB8C00, #EF6C00) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner Ad - Unity Ads -->
+    <div id="adTopContainer">
+        <div class="unity-ad-container">
+            <div class="ad-loading">Loading Unity Ads...</div>
+            <div id="unityTopBanner"></div>
+        </div>
+    </div>
+
+    <!-- Game Area -->
+    <div id="gameWrapper">
+        <div id="gameContainer">
+            <canvas id="gameCanvas"></canvas>
+            <div class="score" id="score">0</div>
+            <div class="difficulty" id="difficulty">Level 1</div>
+            <div class="speed-indicator" id="speedIndicator">Speed: 100%</div>
+            <div class="fps-counter" id="fpsCounter">FPS: 60</div>
+            
+            <!-- Start Screen -->
+            <div id="startScreen">
+                <div class="game-over-content">
+                    <h1>🎮 FLAPPY BIRD</h1>
+                    <p>Tap or press SPACE to flap</p>
+                    <p>Navigate through the pipes!</p>
+                    <button onclick="startGame()">▶ START GAME</button>
+                    
+                    <!-- Optional: Add rewarded video button -->
+                    <button class="reward-button" onclick="showRewardedAd()">
+                        🎁 Get Free Continue
+                    </button>
+                    
+                    <div class="instructions">
+                        <p><strong>📈 PROGRESSIVE DIFFICULTY:</strong></p>
+                        <p>• First 10 points: Learning phase</p>
+                        <p>• 10-35 points: Gradual challenge</p>
+                        <p>• 35+ points: Expert level!</p>
+                        <p style="color: #FFD700; margin-top: 5px;">⚡ Max speed: 170%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen">
+                <div class="game-over-content">
+                    <h2>💀 GAME OVER</h2>
+                    <div class="score-display" id="finalScore">🎯 Score: 0</div>
+                    <div class="high-score-display" id="highScore">🏆 High Score: 0</div>
+                    <div class="score-display" id="maxDifficulty">⚡ Max Speed: 100%</div>
+                    <button onclick="restartGame()">🔄 PLAY AGAIN</button>
+                    
+                    <!-- Optional: Add rewarded video button on game over -->
+                    <button class="reward-button" onclick="showRewardedAd()">
+                        🎁 Watch Ad to Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Banner Ad - Unity Ads -->
+    <div id="adBottomContainer">
+        <div class="unity-ad-container">
+            <div class="ad-loading">Loading Unity Ads...</div>
+            <div id="unityBottomBanner"></div>
+        </div>
+    </div>
+
+    <!-- Test Mode Notification -->
+    <div id="testModeNotification">UNITY ADS TEST MODE</div>
+
+    <script>
+        // ============================================
+        // UNITY ADS CONFIGURATION - UPDATED FOR HTTP
+        // ============================================
+        const UNITY_ADS_CONFIG = {
+            // Your real Unity Game ID from the dashboard
+            gameId: '6016182',
+            
+            // ✅ CORRECT AD UNIT IDs FROM YOUR DASHBOARD:
+            topBannerPlacement: 'Banner_Android',
+            bottomBannerPlacement: 'Banner_Android',
+            interstitialPlacement: 'Interstitial_Android',
+            rewardedPlacement: 'Rewarded_Android',
+            
+            // ✅ FOR HTTP TESTING - SET TO TRUE
+            testMode: true,
+            
+            bannerRefreshRate: 30,
+            interstitialFrequency: 3
+        };
+
+        // ============================================
+        // UNITY ADS MANAGER - MODIFIED FOR HTTP
+        // ============================================
+        class UnityAdsManager {
+            constructor() {
+                this.adsEnabled = true;
+                this.adsInitialized = false;
+                this.interstitialCount = 0;
+                this.gameId = UNITY_ADS_CONFIG.gameId;
+                
+                // Store ad instances
+                this.topBanner = null;
+                this.bottomBanner = null;
+                this.rewardedAd = null;
+                this.interstitialAd = null;
+                
+                // Check if we're on HTTP
+                this.isHttp = window.location.protocol === 'http:';
+                this.isLocalhost = window.location.hostname === 'localhost' || 
+                                 window.location.hostname === '127.0.0.1';
+            }
+
+            init() {
+                if (!this.adsEnabled) return;
+                
+                console.log('Unity Ads Manager Initializing...');
+                console.log('Protocol:', window.location.protocol);
+                console.log('Hostname:', window.location.hostname);
+                
+                // Show test notification for HTTP/localhost
+                if (this.isHttp || this.isLocalhost) {
+                    console.log('HTTP/localhost detected - using simulation mode');
+                    document.getElementById('testModeNotification').style.display = 'block';
+                    document.getElementById('testModeNotification').textContent = 'UNITY ADS SIMULATION (HTTP)';
+                    document.getElementById('testModeNotification').style.background = '#FF9800';
+                }
+                
+                // Force test mode for HTTP
+                if (this.isHttp || this.isLocalhost) {
+                    UNITY_ADS_CONFIG.testMode = true;
+                }
+                
+                // Initialize Unity Ads SDK
+                this.initializeUnityAds();
+            }
+
+            initializeUnityAds() {
+                try {
+                    // Check if Unity Ads SDK is available
+                    if (typeof unityAds === 'undefined') {
+                        console.warn('Unity Ads SDK not loaded. Using simulation...');
+                        this.simulateAds();
+                        return;
+                    }
+                    
+                    // Initialize Unity Ads
+                    unityAds.init({
+                        gameId: this.gameId,
+                        testMode: UNITY_ADS_CONFIG.testMode,
+                        onInitComplete: () => {
+                            console.log('Unity Ads initialized successfully');
+                            this.adsInitialized = true;
+                            this.loadBannerAds();
+                            this.preloadInterstitial();
+                            this.preloadRewarded();
+                        },
+                        onInitFailed: (error) => {
+                            console.error('Unity Ads initialization failed:', error);
+                            // Fall back to simulation
+                            this.simulateAds();
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.error('Error initializing Unity Ads:', error);
+                    this.simulateAds();
+                }
+            }
+
+            simulateAds() {
+                console.log('Using simulated ads...');
+                this.adsInitialized = true;
+                
+                // Create simulated banners immediately
+                setTimeout(() => {
+                    this.createSimulatedBanner('top');
+                    this.createSimulatedBanner('bottom');
+                    
+                    // Preload simulated interstitial
+                    this.interstitialAd = {
+                        show: (options) => {
+                            console.log('Simulated interstitial shown');
+                            setTimeout(() => {
+                                if (options && options.onClose) {
+                                    options.onClose();
+                                }
+                            }, 2000);
+                        }
+                    };
+                    
+                    // Preload simulated rewarded
+                    this.rewardedAd = {
+                        show: (options) => {
+                            console.log('Simulated rewarded ad shown');
+                            const completed = confirm('Simulated Rewarded Ad\n\nComplete ad to get reward?\n\nClick OK for reward, Cancel for no reward.');
+                            setTimeout(() => {
+                                if (options && options.onClose) {
+                                    options.onClose(completed);
+                                }
+                                if (completed) {
+                                    this.giveReward();
+                                }
+                            }, 500);
+                        }
+                    };
+                }, 1000);
+            }
+
+            createSimulatedBanner(position) {
+                const containerId = position === 'top' ? 'unityTopBanner' : 'unityBottomBanner';
+                const loadingId = position === 'top' ? '#adTopContainer .ad-loading' : '#adBottomContainer .ad-loading';
+                
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                // Create simulated banner
+                const bannerId = `simBanner_${position}_${Math.random().toString(36).substr(2, 9)}`;
+                container.innerHTML = `
+                    <div id="${bannerId}" style="
+                        width: 320px;
+                        height: 50px;
+                        background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 4px;
+                        font-family: Arial, sans-serif;
+                        text-align: center;
+                        border: 2px solid #fff;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    ">
+                        <div style="font-weight: bold; font-size: 14px;">🎮 UNITY ADS SIMULATION</div>
+                        <div style="font-size: 10px; opacity: 0.8;">${position === 'top' ? 'Top' : 'Bottom'} Banner • Click to Refresh</div>
+                    </div>
+                `;
+                
+                container.style.display = 'block';
+                
+                // Remove loading text
+                const loadingEl = document.querySelector(loadingId);
+                if (loadingEl) {
+                    loadingEl.style.display = 'none';
+                }
+                
+                // Add click to refresh
+                const bannerEl = document.getElementById(bannerId);
+                if (bannerEl) {
+                    bannerEl.onclick = () => {
+                        console.log(`Refreshing ${position} banner`);
+                        const colors = [
+                            'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+                            'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)',
+                            'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)'
+                        ];
+                        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                        bannerEl.style.background = randomColor;
+                        bannerEl.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            bannerEl.style.transform = 'scale(1)';
+                        }, 150);
+                    };
+                }
+                
+                // Store reference for refresh
+                if (position === 'top') {
+                    this.topBanner = { refresh: () => bannerEl.click() };
+                } else {
+                    this.bottomBanner = { refresh: () => bannerEl.click() };
+                }
+            }
+
+            loadBannerAds() {
+                if (!this.adsInitialized) return;
+                
+                console.log('Loading Unity Ads banners...');
+                
+                // For HTTP/localhost, use simulated banners
+                if (this.isHttp || this.isLocalhost || !unityAds) {
+                    this.createSimulatedBanner('top');
+                    this.createSimulatedBanner('bottom');
+                    return;
+                }
+                
+                // Load top banner
+                this.topBanner = unityAds.createBanner({
+                    placementId: UNITY_ADS_CONFIG.topBannerPlacement,
+                    container: document.getElementById('unityTopBanner'),
+                    width: 320,
+                    height: 50,
+                    onLoad: () => {
+                        console.log('Top banner loaded');
+                        document.getElementById('unityTopBanner').style.display = 'block';
+                        document.querySelector('#adTopContainer .ad-loading').style.display = 'none';
+                    },
+                    onError: (error) => {
+                        console.error('Top banner error:', error);
+                        document.querySelector('#adTopContainer .ad-loading').innerHTML = 'Ad Space';
+                    }
+                });
+                
+                // Load bottom banner
+                this.bottomBanner = unityAds.createBanner({
+                    placementId: UNITY_ADS_CONFIG.bottomBannerPlacement,
+                    container: document.getElementById('unityBottomBanner'),
+                    width: 320,
+                    height: 50,
+                    onLoad: () => {
+                        console.log('Bottom banner loaded');
+                        document.getElementById('unityBottomBanner').style.display = 'block';
+                        document.querySelector('#adBottomContainer .ad-loading').style.display = 'none';
+                    },
+                    onError: (error) => {
+                        console.error('Bottom banner error:', error);
+                        document.querySelector('#adBottomContainer .ad-loading').innerHTML = 'Ad Space';
+                    }
+                });
+                
+                // Refresh banners periodically
+                setInterval(() => {
+                    this.refreshBanner('top');
+                    this.refreshBanner('bottom');
+                }, UNITY_ADS_CONFIG.bannerRefreshRate * 1000);
+            }
+
+            refreshBanner(position) {
+                if (!this.adsInitialized) return;
+                
+                try {
+                    if (position === 'top' && this.topBanner) {
+                        this.topBanner.refresh();
+                        console.log('Top banner refreshed');
+                    } else if (position === 'bottom' && this.bottomBanner) {
+                        this.bottomBanner.refresh();
+                        console.log('Bottom banner refreshed');
+                    }
+                } catch (error) {
+                    console.error('Error refreshing banner:', error);
+                }
+            }
+
+            preloadInterstitial() {
+                if (!this.adsInitialized) return;
+                
+                // For HTTP/localhost, use simulated interstitial
+                if (this.isHttp || this.isLocalhost || !unityAds) {
+                    this.interstitialAd = {
+                        show: (options) => {
+                            console.log('Showing simulated interstitial');
+                            // Simple alert for simulation
+                            setTimeout(() => {
+                                if (options && options.onClose) {
+                                    options.onClose();
+                                }
+                            }, 1000);
+                        }
+                    };
+                    return;
+                }
+                
+                this.interstitialAd = unityAds.createInterstitial({
+                    placementId: UNITY_ADS_CONFIG.interstitialPlacement,
+                    onLoad: () => {
+                        console.log('Interstitial ad preloaded');
+                    },
+                    onError: (error) => {
+                        console.error('Interstitial error:', error);
+                    }
+                });
+            }
+
+            showInterstitial() {
+                if (!this.adsEnabled || !this.adsInitialized || !this.interstitialAd) {
+                    console.log('Interstitial not available');
+                    return;
+                }
+                
+                this.interstitialCount++;
+                
+                // Show interstitial every N games
+                if (this.interstitialCount >= UNITY_ADS_CONFIG.interstitialFrequency) {
+                    console.log('Showing interstitial ad');
+                    
+                    this.interstitialAd.show({
+                        onClose: () => {
+                            console.log('Interstitial closed');
+                            // Preload next interstitial
+                            this.preloadInterstitial();
+                        }
+                    });
+                    
+                    // Reset counter
+                    this.interstitialCount = 0;
+                }
+            }
+
+            preloadRewarded() {
+                if (!this.adsInitialized) return;
+                
+                // For HTTP/localhost, use simulated rewarded
+                if (this.isHttp || this.isLocalhost || !unityAds) {
+                    this.rewardedAd = {
+                        show: (options) => {
+                            console.log('Showing simulated rewarded ad');
+                            // Simple confirm for simulation
+                            const completed = confirm('Simulated Rewarded Ad\n\nWatch complete ad to get reward?\n\nClick OK for reward, Cancel for no reward.');
+                            setTimeout(() => {
+                                if (options && options.onClose) {
+                                    options.onClose(completed);
+                                }
+                                if (completed) {
+                                    this.giveReward();
+                                }
+                            }, 500);
+                        }
+                    };
+                    return;
+                }
+                
+                this.rewardedAd = unityAds.createRewarded({
+                    placementId: UNITY_ADS_CONFIG.rewardedPlacement,
+                    onLoad: () => {
+                        console.log('Rewarded ad preloaded');
+                    },
+                    onError: (error) => {
+                        console.error('Rewarded ad error:', error);
+                    }
+                });
+            }
+
+            showRewardedAd() {
+                if (!this.adsEnabled || !this.adsInitialized || !this.rewardedAd) {
+                    console.log('Rewarded ad not available');
+                    alert('Rewarded ad not available in simulation mode');
+                    return;
+                }
+                
+                console.log('Showing rewarded ad');
+                
+                this.rewardedAd.show({
+                    onClose: (completed) => {
+                        if (completed) {
+                            console.log('Rewarded ad completed - give reward to player');
+                            this.giveReward();
+                        } else {
+                            console.log('Rewarded ad not completed');
+                        }
+                        // Preload next rewarded ad
+                        this.preloadRewarded();
+                    }
+                });
+            }
+
+            giveReward() {
+                // Give player a continue or bonus
+                alert('🎉 Reward granted! You earned a free continue!');
+                // You can add game logic here, like:
+                // restartGame(); // with same score
+                // or give extra life, etc.
+            }
+
+            showAdPlaceholders() {
+                // Show placeholder ads if Unity Ads fails to load
+                const placeholders = document.querySelectorAll('.ad-loading');
+                placeholders.forEach(placeholder => {
+                    placeholder.innerHTML = 'Ad Space (Simulation)';
+                    placeholder.style.color = '#888';
+                });
+            }
+
+            trackAdEvent(eventName, adType) {
+                // For analytics
+                console.log(`Unity Ad Event: ${eventName} - ${adType}`);
+            }
+
+            destroy() {
+                // Clean up ads
+                if (this.topBanner) this.topBanner.destroy();
+                if (this.bottomBanner) this.bottomBanner.destroy();
+                console.log('Unity Ads Manager destroyed');
+            }
+        }
+
+        // ============================================
+        // GAME ENGINE (UNCHANGED - YOUR EXISTING CODE)
+        // ============================================
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const scoreElement = document.getElementById('score');
+        const finalScoreElement = document.getElementById('finalScore');
+        const highScoreElement = document.getElementById('highScore');
+        const difficultyElement = document.getElementById('difficulty');
+        const maxDifficultyElement = document.getElementById('maxDifficulty');
+        const fpsCounterElement = document.getElementById('fpsCounter');
+        const speedIndicatorElement = document.getElementById('speedIndicator');
+        
+        // Set canvas size
+        canvas.width = 400;
+        canvas.height = 600;
+        
+        // Initialize Unity Ads Manager
+        const unityAdsManager = new UnityAdsManager();
+        
+        // Game constants
+        const GRAVITY = 0.25;
+        const JUMP_STRENGTH = -5.5;
+        const PIPE_WIDTH = 60;
+        const PIPE_GAP_START = 160;
+        const BIRD_SIZE = 20;
+        const PIPE_SPAWN_INTERVAL_START = 2200;
+        const GROUND_HEIGHT = 50;
+        
+        // Game objects
+        let bird = {
+            x: 50,
+            y: canvas.height / 2,
+            velocity: 0,
+            color: '#FFD700',
+            rotation: 0,
+            trail: []
+        };
+        
+        // Game state
+        let pipes = [];
+        let score = 0;
+        let highScore = localStorage.getItem('flappyHighScore') || 0;
+        let maxSpeedReached = 100;
+        let gameState = 'start';
+        let lastPipeTime = 0;
+        let gameLoopRunning = false;
+        
+        // Performance tracking
+        let lastFrameTime = 0;
+        let fps = 60;
+        let frameCount = 0;
+        let lastFpsUpdate = 0;
+        
+        // Progressive difficulty
+        let basePipeSpeed = 3.0;
+        let basePipeGap = PIPE_GAP_START;
+        let basePipeSpawnInterval = PIPE_SPAWN_INTERVAL_START;
+        
+        let currentPipeSpeed = basePipeSpeed;
+        let currentPipeGap = basePipeGap;
+        let currentPipeSpawnInterval = basePipeSpawnInterval;
+        let speedMultiplier = 1.0;
+        let difficultyLevel = 1;
+
+        function drawBird() {
+            ctx.save();
+            ctx.translate(bird.x, bird.y);
+            ctx.rotate(bird.rotation);
+            
+            // Bird body
+            ctx.fillStyle = bird.color;
+            ctx.beginPath();
+            ctx.arc(0, 0, BIRD_SIZE, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eye
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(8, -5, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Beak
+            ctx.fillStyle = '#FF4500';
+            ctx.beginPath();
+            ctx.moveTo(15, 0);
+            ctx.lineTo(30, 0);
+            ctx.lineTo(15, 8);
+            ctx.fill();
+            
+            // Wing
+            ctx.fillStyle = '#FFA500';
+            ctx.beginPath();
+            const wingFlap = Math.sin(Date.now() / 100) * 0.3;
+            ctx.ellipse(-5, 0, 12, 8, Math.PI/4 + wingFlap, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+        }
+        
+        function drawPipes() {
+            for (let i = 0; i < pipes.length; i++) {
+                const pipe = pipes[i];
+                
+                let pipeColor;
+                if (speedMultiplier >= 1.5) {
+                    pipeColor = '#8B0000';
+                } else if (speedMultiplier >= 1.3) {
+                    pipeColor = '#B22222';
+                } else if (speedMultiplier >= 1.15) {
+                    pipeColor = '#DC143C';
+                } else {
+                    pipeColor = '#006400';
+                }
+                
+                ctx.fillStyle = pipeColor;
+                ctx.fillRect(pipe.x, 0, PIPE_WIDTH, pipe.topHeight);
+                ctx.fillRect(pipe.x, pipe.bottomY, PIPE_WIDTH, canvas.height - pipe.bottomY);
+                
+                ctx.fillStyle = '#228B22';
+                ctx.fillRect(pipe.x - 5, pipe.topHeight - 15, PIPE_WIDTH + 10, 15);
+                ctx.fillRect(pipe.x - 5, pipe.bottomY, PIPE_WIDTH + 10, 15);
+            }
+        }
+        
+        function drawGround() {
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
+            ctx.fillStyle = '#7CFC00';
+            ctx.fillRect(0, canvas.height - GROUND_HEIGHT - 5, canvas.width, 5);
+        }
+        
+        function drawBackground() {
+            let skyColor;
+            if (speedMultiplier >= 1.5) {
+                skyColor = '#4169E1';
+            } else if (speedMultiplier >= 1.3) {
+                skyColor = '#6495ED';
+            } else if (speedMultiplier >= 1.15) {
+                skyColor = '#87CEEB';
+            } else {
+                skyColor = '#87CEEB';
+            }
+            
+            ctx.fillStyle = skyColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height - GROUND_HEIGHT);
+            
+            const cloudSpeed = 0.01 + (speedMultiplier * 0.005);
+            drawCloud(100, 100, 40, cloudSpeed);
+            drawCloud(300, 80, 50, cloudSpeed);
+            drawCloud(200, 150, 35, cloudSpeed);
+        }
+        
+        function drawCloud(x, y, size, speed) {
+            const cloudOffset = (Date.now() * speed) % 800;
+            const adjustedX = (x - cloudOffset) % 800;
+            if (adjustedX < -100) return;
+            
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.arc(adjustedX, y, size * 0.6, 0, Math.PI * 2);
+            ctx.arc(adjustedX + size * 0.4, y - size * 0.2, size * 0.5, 0, Math.PI * 2);
+            ctx.arc(adjustedX + size * 0.8, y, size * 0.6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function updateFPS(currentTime) {
+            frameCount++;
+            if (currentTime - lastFpsUpdate >= 500) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastFpsUpdate));
+                fpsCounterElement.textContent = `FPS: ${fps}`;
+                frameCount = 0;
+                lastFpsUpdate = currentTime;
+            }
+        }
+        
+        function gameLoop(currentTime) {
+            if (!lastFrameTime) lastFrameTime = currentTime;
+            
+            const deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            
+            updateFPS(currentTime);
+            updateGame(deltaTime);
+            render();
+            
+            if (gameState !== 'start') {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        function updateGame(deltaTime) {
+            if (gameState !== 'playing') return;
+            
+            const timeScale = deltaTime / (1000 / 60);
+            
+            // Update bird
+            bird.velocity += GRAVITY * timeScale;
+            bird.y += bird.velocity * timeScale;
+            bird.rotation = Math.max(-0.5, Math.min(0.5, bird.velocity * 0.08));
+            
+            // Boundary checks
+            if (bird.y < BIRD_SIZE) {
+                bird.y = BIRD_SIZE;
+                bird.velocity = 0;
+                gameOver();
+                return;
+            }
+            
+            if (bird.y > canvas.height - GROUND_HEIGHT - BIRD_SIZE) {
+                bird.y = canvas.height - GROUND_HEIGHT - BIRD_SIZE;
+                gameOver();
+                return;
+            }
+            
+            // Update pipes
+            const currentTime = performance.now();
+            if (currentTime - lastPipeTime > currentPipeSpawnInterval) {
+                spawnPipe();
+                lastPipeTime = currentTime;
+            }
+            
+            // Move pipes
+            for (let i = pipes.length - 1; i >= 0; i--) {
+                pipes[i].x -= currentPipeSpeed * timeScale;
+                
+                if (!pipes[i].passed && pipes[i].x + PIPE_WIDTH < bird.x) {
+                    pipes[i].passed = true;
+                    score++;
+                    scoreElement.textContent = score;
+                    updateProgressiveDifficulty();
+                }
+                
+                if (pipes[i].x + PIPE_WIDTH < 0) {
+                    pipes.splice(i, 1);
+                }
+            }
+            
+            checkCollisions();
+        }
+        
+        function updateProgressiveDifficulty() {
+            let speedIncrease = 0;
+            
+            if (score <= 10) {
+                if (score > 5) {
+                    speedIncrease = (score - 5) * 0.005;
+                }
+                currentPipeGap = Math.max(140, basePipeGap - ((score - 5) * 0.5));
+                currentPipeSpawnInterval = Math.max(1800, basePipeSpawnInterval - ((score - 5) * 10));
+                
+            } else if (score <= 35) {
+                const pointsAbove10 = score - 10;
+                speedIncrease = (5 * 0.005) + (pointsAbove10 * 0.01);
+                currentPipeGap = Math.max(120, basePipeGap - (5 * 0.5) - (pointsAbove10 * 1));
+                currentPipeSpawnInterval = Math.max(1200, basePipeSpawnInterval - (5 * 10) - (pointsAbove10 * 20));
+                
+            } else {
+                const pointsAbove35 = score - 35;
+                speedIncrease = (5 * 0.005) + (25 * 0.01) + (pointsAbove35 * 0.012);
+                currentPipeGap = Math.max(90, basePipeGap - (5 * 0.5) - (25 * 1) - (pointsAbove35 * 1.5));
+                currentPipeSpawnInterval = Math.max(800, basePipeSpawnInterval - (5 * 10) - (25 * 20) - (pointsAbove35 * 25));
+            }
+            
+            speedMultiplier = 1.0 + speedIncrease;
+            speedMultiplier = Math.min(1.7, speedMultiplier);
+            currentPipeSpeed = basePipeSpeed * speedMultiplier;
+            
+            // Update level
+            if (score <= 10) difficultyLevel = 1;
+            else if (score <= 20) difficultyLevel = 2;
+            else if (score <= 30) difficultyLevel = 3;
+            else if (score <= 40) difficultyLevel = 4;
+            else if (score <= 50) difficultyLevel = 5;
+            else difficultyLevel = 6;
+            
+            // Update UI
+            const speedPercentage = Math.round(speedMultiplier * 100);
+            speedIndicatorElement.textContent = `Speed: ${speedPercentage}%`;
+            difficultyElement.textContent = `Level ${difficultyLevel}`;
+            
+            // Update colors
+            updateDifficultyColors(speedPercentage);
+            
+            // Track max speed
+            if (speedPercentage > maxSpeedReached) {
+                maxSpeedReached = speedPercentage;
+            }
+        }
+        
+        function updateDifficultyColors(speedPercentage) {
+            if (speedPercentage >= 150) {
+                speedIndicatorElement.style.color = '#FF0000';
+                difficultyElement.style.color = '#FF0000';
+            } else if (speedPercentage >= 130) {
+                speedIndicatorElement.style.color = '#FF4500';
+                difficultyElement.style.color = '#FF4500';
+            } else if (speedPercentage >= 115) {
+                speedIndicatorElement.style.color = '#FFA500';
+                difficultyElement.style.color = '#FFA500';
+            } else if (speedPercentage >= 105) {
+                speedIndicatorElement.style.color = '#FFD700';
+                difficultyElement.style.color = '#FFD700';
+            } else {
+                speedIndicatorElement.style.color = 'white';
+                difficultyElement.style.color = 'white';
+            }
+        }
+        
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackground();
+            drawPipes();
+            drawGround();
+            drawBird();
+        }
+        
+        function spawnPipe() {
+            const minGapY = 80;
+            const maxGapY = canvas.height - GROUND_HEIGHT - currentPipeGap - 80;
+            const gapY = Math.random() * (maxGapY - minGapY) + minGapY;
+            
+            pipes.push({
+                x: canvas.width,
+                topHeight: gapY,
+                bottomY: gapY + currentPipeGap,
+                passed: false
+            });
+        }
+        
+        function checkCollisions() {
+            for (let pipe of pipes) {
+                if (bird.x + BIRD_SIZE > pipe.x && 
+                    bird.x - BIRD_SIZE < pipe.x + PIPE_WIDTH) {
+                    if (bird.y - BIRD_SIZE < pipe.topHeight || 
+                        bird.y + BIRD_SIZE > pipe.bottomY) {
+                        gameOver();
+                        return;
+                    }
+                }
+            }
+        }
+        
+        function startGame() {
+            if (gameLoopRunning) return;
+            
+            if (typeof cancelAnimationFrame === 'function') {
+                cancelAnimationFrame(startScreenAnimationId);
+            }
+            
+            gameState = 'playing';
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            
+            // Reset game state
+            bird.y = canvas.height / 2;
+            bird.velocity = -3.5;
+            bird.rotation = -0.2;
+            bird.trail = [];
+            pipes = [];
+            score = 0;
+            
+            // Reset difficulty
+            speedMultiplier = 1.0;
+            currentPipeSpeed = basePipeSpeed;
+            currentPipeGap = basePipeGap;
+            currentPipeSpawnInterval = basePipeSpawnInterval;
+            difficultyLevel = 1;
+            maxSpeedReached = 100;
+            
+            // Reset timing
+            lastPipeTime = performance.now();
+            lastFrameTime = 0;
+            lastFpsUpdate = performance.now();
+            frameCount = 0;
+            
+            // Update UI
+            scoreElement.textContent = '0';
+            difficultyElement.textContent = `Level 1`;
+            difficultyElement.style.color = 'white';
+            speedIndicatorElement.textContent = `Speed: 100%`;
+            speedIndicatorElement.style.color = 'white';
+            fpsCounterElement.textContent = `FPS: 60`;
+            
+            // Start game loop
+            gameLoopRunning = true;
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function gameOver() {
+            gameState = 'gameOver';
+            gameLoopRunning = false;
+            
+            // Save high score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('flappyHighScore', highScore);
+            }
+            
+            // Update UI
+            finalScoreElement.textContent = `🎯 Score: ${score}`;
+            highScoreElement.textContent = `🏆 High Score: ${highScore}`;
+            maxDifficultyElement.textContent = `⚡ Max Speed: ${maxSpeedReached}%`;
+            
+            // Show interstitial ad
+            unityAdsManager.showInterstitial();
+            
+            // Refresh banner ads
+            setTimeout(() => {
+                unityAdsManager.refreshBanner('top');
+                unityAdsManager.refreshBanner('bottom');
+            }, 1000);
+            
+            // Show game over screen
+            setTimeout(() => {
+                gameOverScreen.style.display = 'flex';
+            }, 800);
+        }
+        
+        function restartGame() {
+            startGame();
+        }
+        
+        // Expose rewarded ad function for button click
+        function showRewardedAd() {
+            unityAdsManager.showRewardedAd();
+        }
+        
+        // ============================================
+        // INPUT HANDLING
+        // ============================================
+        function flap() {
+            if (gameState === 'playing') {
+                bird.velocity = JUMP_STRENGTH;
+                bird.color = '#FFFF00';
+                setTimeout(() => {
+                    if (gameState === 'playing') {
+                        bird.color = '#FFD700';
+                    }
+                }, 100);
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                flap();
+                e.preventDefault();
+            }
+        });
+        
+        canvas.addEventListener('click', flap);
+        canvas.addEventListener('touchstart', (e) => {
+            flap();
+            e.preventDefault();
+        }, { passive: false });
+        
+        // ============================================
+        // START SCREEN ANIMATION
+        // ============================================
+        let startScreenAnimationId;
+        function animateStartScreen() {
+            if (gameState === 'start') {
+                bird.y = canvas.height / 2 + Math.sin(Date.now() / 500) * 15;
+                bird.rotation = Math.sin(Date.now() / 600) * 0.2;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBackground();
+                drawGround();
+                drawBird();
+                
+                startScreenAnimationId = requestAnimationFrame(animateStartScreen);
+            }
+        }
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            // Initialize high score display
+            highScoreElement.textContent = `🏆 High Score: ${highScore}`;
+            difficultyElement.textContent = `Level 1`;
+            speedIndicatorElement.textContent = `Speed: 100%`;
+            
+            // Initialize Unity Ads
+            unityAdsManager.init();
+            
+            // Start menu animation
+            animateStartScreen();
+            
+            console.log('Flappy Bird with Unity Ads - Ready!');
+            console.log('Game running at:', window.location.href);
+        }
+        
+        // Wait for DOM to load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            unityAdsManager.destroy();
+            if (typeof cancelAnimationFrame === 'function') {
+                cancelAnimationFrame(startScreenAnimationId);
+            }
+        });
+    </script>
+</body>
+</html>
